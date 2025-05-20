@@ -186,7 +186,7 @@
     const role = localStorage.getItem('role');
 
     if (!token || role !== 'STUDENT') {
-      alert("Bu sayfaya sadece öğrenciler erişebilir.");
+      alert("Only students are able to view this page.");
       window.location.href = 'login.html';
     }
 
@@ -206,7 +206,7 @@
         const matched = students.students.find(s => s.userId === user.user.id);
 
         if (!matched) {
-          alert("Kullanıcıya ait öğrenci kaydı bulunamadı.");
+          alert("No student record found for this user.");
           return;
         }
 
@@ -230,8 +230,8 @@
         });
 
       } catch (err) {
-        console.error("Notlar yüklenirken hata:", err);
-        alert("Bir hata oluştu.");
+        console.error("Error occured while loading grades:", err);
+        alert("An error occured.");
       }
     }
 

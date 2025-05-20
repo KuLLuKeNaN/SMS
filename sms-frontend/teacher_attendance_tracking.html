@@ -261,7 +261,7 @@
   <script>
   const token = localStorage.getItem('token');
     if (!token) {
-      alert("Lütfen giriş yapın.");
+      alert("Please log in.");
       window.location.href = "login.html";
     }
 
@@ -300,7 +300,7 @@
 
       } catch (err) {
         console.error(err);
-        alert("Öğrenciler yüklenemedi.");
+        alert("Students were not loaded.");
       }
     });
 
@@ -330,7 +330,7 @@
         }
       }
 
-      alert("Tüm yoklamalar başarıyla kaydedildi!");
+      alert("All attendances were saved succesfully!");
     });
 
    

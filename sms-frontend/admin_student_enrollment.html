@@ -274,7 +274,7 @@
   <script>
   const token = localStorage.getItem('token');
     if (!token) {
-      alert("Lütfen giriş yapın.");
+      alert("Please log in.");
       window.location.href = "login.html";
     }
 
@@ -314,16 +314,16 @@
         const data = await res.json();
 
         if (res.ok) {
-          alert(editingId ? "Öğrenci güncellendi." : "Öğrenci eklendi.");
+          alert(editingId ? "Student updated." : "Student was added.");
           editingId = null;
           form.reset();
           loadStudents();
         } else {
-          alert("Hata: " + (data.error || "İşlem başarısız."));
+          alert("Error: " + (data.error || "Request failed."));
         }
       } catch (err) {
         console.error(err);
-        alert("Sunucu hatası.");
+        alert("Server error.");
       }
     });
 
@@ -369,7 +369,7 @@
         document.querySelectorAll('.delete-btn').forEach(btn => {
           btn.addEventListener('click', async function () {
             const id = this.getAttribute('data-id');
-            if (confirm("Bu öğrenciyi silmek istiyor musun?")) {
+            if (confirm("Do you want to delete this student?")) {
               try {
                 const res = await fetch(`https://sms-b004.onrender.com/api/students/${id}`, {
                   method: 'DELETE',
@@ -377,10 +377,10 @@
                 });
 
                 if (res.ok) {
-                  alert("Silindi.");
+                  alert("Deleted.");
                   loadStudents();
                 } else {
-                  alert("Silme başarısız.");
+                  alert("Deletion unsuccesfull.");
                 }
               } catch (err) {
                 console.error(err);
@@ -391,7 +391,7 @@
 
       } catch (err) {
         console.error(err);
-        alert("Liste yüklenemedi.");
+        alert("List was not loaded.");
       }
     }
 

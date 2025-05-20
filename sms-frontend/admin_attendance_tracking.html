@@ -274,7 +274,7 @@
   <script>
   const token = localStorage.getItem('token');
     if (!token) {
-      alert("Lütfen giriş yapın.");
+      alert("Please log in.");
       window.location.href = "login.html";
     }
 
@@ -285,7 +285,7 @@
 
     loadBtn.addEventListener('click', async () => {
       const date = attendanceDate.value;
-      if (!date) return alert("Tarih seçmelisiniz.");
+      if (!date) return alert("You must choose a date.");
 
       try {
         const res = await fetch('https://sms-b004.onrender.com/api/students', {
@@ -313,7 +313,7 @@
 
       } catch (err) {
         console.error(err);
-        alert("Öğrenciler yüklenemedi.");
+        alert("Students were not load.");
       }
     });
 
@@ -343,7 +343,7 @@
         }
       }
 
-      alert("Tüm yoklamalar başarıyla kaydedildi!");
+      alert("All attendances were registered successfully!");
     });
 
   // Dashboard yönlendirme
