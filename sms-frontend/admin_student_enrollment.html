@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Enrollment & Management - SMS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f4f7f6;
+      display: flex;
+      min-height: 100vh;
+    }
+    .container { max-width: 900px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    h2 { margin-bottom: 15px; }
+    form input, form select, form button { padding: 10px; margin-bottom: 10px; width: 100%; font-size: 1rem; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+    th { background-color: #f9f9f9; }
+    button { background-color: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background-color: #2980b9; }
+    .action-btn { padding: 6px 10px; margin: 0 2px; font-size: 0.9rem; }
+    .delete-btn { background-color: #e74c3c; }
+    .delete-btn:hover { background-color: #c0392b; }
+    .edit-btn { background-color: #f39c12; }
+    .edit-btn:hover { background-color: #d68910; }
+    /* Sidebar styling */
+    .sidebar {
+      width: 250px;
+      background: #34495e;
+      color: #fff;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .sidebar h2 {
+      text-align: center;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #fff;
+      padding-bottom: 10px;
+    }
+    
+    .nav-list {
+      list-style: none;
+      flex: 1;
+    }
+    
+    .nav-list li {
+      margin-bottom: 15px;
+    }
+    
+    .nav-list li a {
+      text-decoration: none;
+      color: #fff;
+      font-size: 1rem;
+      display: block;
+      padding: 10px 15px;
+      border-radius: 5px;
+      transition: background 0.3s ease;
+    }
+    
+    .nav-list li a:hover,
+    .nav-list li a.active {
+      background: #2c3e50;
+    }
+    
+    .logout {
+      text-align: center;
+      margin-top: 20px;
+    }
+    
+    .logout a {
+      text-decoration: none;
+      color: #fff;
+      background: #e74c3c;
+      padding: 10px 20px;
+      border-radius: 5px;
+      transition: background 0.3s ease;
+    }
+    
+    .logout a:hover {
+      background: #c0392b;
+    }
+    
+    /* Main content styling */
+    .main-content {
+      flex: 1;
+      background: #ecf0f1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    
+    .header {
+      background: #fff;
+      padding: 15px 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .header h1 {
+      font-size: 1.5rem;
+      color: #333;
+    }
+    
+    /* Enrollment Form styling */
+    .enrollment-form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+    
+    .enrollment-form h2 {
+      margin-bottom: 20px;
+      font-size: 1.3rem;
+      color: #333;
+      border-bottom: 1px solid #ecf0f1;
+      padding-bottom: 10px;
+    }
+    
+    .enrollment-form form {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .enrollment-form label {
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 5px;
+    }
+    
+    .enrollment-form input,
+    .enrollment-form select {
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    
+    .enrollment-form button {
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background: #4e54c8;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .enrollment-form button:hover {
+      background: #3d44a5;
+    }
+    
+    /* Student Table styling */
+    .student-table {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .student-table h2 {
+      margin-bottom: 20px;
+      font-size: 1.3rem;
+      color: #333;
+      border-bottom: 1px solid #ecf0f1;
+      padding-bottom: 10px;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ecf0f1;
+    }
+    
+    th {
+      background: #f8f8f8;
+      color: #333;
+    }
+    
+    tr:hover {
+      background: #f1f1f1;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 200px;
+        padding: 15px;
+      }
+      
+      .header h1 {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Admin Panel</h2>
+    <ul class="nav-list">
+      <li><a href="#" id="adminDashboard">Dashboard</a></li>
+      <li><a href="#" id="studentEnrollmentBtn">Student Enrollment</a></li>
+	  <li><a href="#" id="attendanceTrackingBtn">Attendance Tracking</a></li>
+      <li><a href="#" id="adminGradesBtn">Grades</a></li>
+      
+    </ul>
+    <div class="logout">
+      <a href="#">Logout</a>
+    </div>
+  </div>
+  <div class="container">
+    <h2>Student Enrollment</h2>
+
+    <form id="enrollForm">
+      <input type="text" id="name" placeholder="Student Name" required />
+      <input type="text" id="studentId" placeholder="Student ID (e.g. A1001)" required />
+      <input type="text" id="contact" placeholder="Contact Info (e.g. 0555...)" required />
+      <input type="text" id="parentInfo" placeholder="Parent/Guardian Info" required />
+      <select id="gradeLevel" required>
+        <option value="">Select Grade Level</option>
+        <option value="Grade 1">Grade 1</option>
+        <option value="Grade 2">Grade 2</option>
+        <option value="Grade 3">Grade 3</option>
+        <option value="Grade 4">Grade 4</option>
+        <option value="Grade 5">Grade 5</option>
+        <option value="Grade 6">Grade 6</option>
+        <option value="Grade 7">Grade 7</option>
+        <option value="Grade 8">Grade 8</option>
+        <option value="Grade 9">Grade 9</option>
+        <option value="Grade 10">Grade 10</option>
+        <option value="Grade 11">Grade 11</option>
+        <option value="Grade 12">Grade 12</option>
+      </select>
+      <button type="submit">Add Student</button>
+    </form>
+
+    <h2>Enrolled Students</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Student ID</th>
+          <th>Contact</th>
+          <th>Parent Info</th>
+          <th>Grade Level</th>
+        </tr>
+      </thead>
+      <tbody id="studentTableBody">
+        <!-- students will be listed here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+  const token = localStorage.getItem('token');
+    if (!token) {
+      alert("Lütfen giriş yapın.");
+      window.location.href = "login.html";
+    }
+
+    const form = document.getElementById('enrollForm');
+    const tbody = document.getElementById('studentTableBody');
+
+    let editingId = null;
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const student = {
+        name: document.getElementById('name').value,
+        studentId: document.getElementById('studentId').value,
+        contact: document.getElementById('contact').value,
+        parentInfo: document.getElementById('parentInfo').value,
+        gradeLevel: document.getElementById('gradeLevel').value
+      };
+
+      try {
+        let url = 'http://localhost:3000/api/students';
+        let method = 'POST';
+
+        if (editingId !== null) {
+          url += '/' + editingId;
+          method = 'PUT';
+        }
+
+        const res = await fetch(url, {
+          method,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify(student)
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          alert(editingId ? "Öğrenci güncellendi." : "Öğrenci eklendi.");
+          editingId = null;
+          form.reset();
+          loadStudents();
+        } else {
+          alert("Hata: " + (data.error || "İşlem başarısız."));
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Sunucu hatası.");
+      }
+    });
+
+    async function loadStudents() {
+      try {
+        const res = await fetch('http://localhost:3000/api/students', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await res.json();
+        tbody.innerHTML = "";
+
+        data.students.forEach(student => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${student.name}</td>
+            <td>${student.studentId}</td>
+            <td>${student.contact}</td>
+            <td>${student.parentInfo}</td>
+            <td>${student.gradeLevel}</td>
+            <td>
+              <button class="action-btn edit-btn" data-id="${student.id}">Edit</button>
+              <button class="action-btn delete-btn" data-id="${student.id}">Delete</button>
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+
+        // Edit
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+          btn.addEventListener('click', function () {
+            const id = this.getAttribute('data-id');
+            const student = data.students.find(s => s.id == id);
+            document.getElementById('name').value = student.name;
+            document.getElementById('studentId').value = student.studentId;
+            document.getElementById('contact').value = student.contact;
+            document.getElementById('parentInfo').value = student.parentInfo;
+            document.getElementById('gradeLevel').value = student.gradeLevel;
+            editingId = id;
+          });
+        });
+
+        // Delete
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+          btn.addEventListener('click', async function () {
+            const id = this.getAttribute('data-id');
+            if (confirm("Bu öğrenciyi silmek istiyor musun?")) {
+              try {
+                const res = await fetch(`http://localhost:3000/api/students/${id}`, {
+                  method: 'DELETE',
+                  headers: { 'Authorization': 'Bearer ' + token }
+                });
+
+                if (res.ok) {
+                  alert("Silindi.");
+                  loadStudents();
+                } else {
+                  alert("Silme başarısız.");
+                }
+              } catch (err) {
+                console.error(err);
+              }
+            }
+          });
+        });
+
+      } catch (err) {
+        console.error(err);
+        alert("Liste yüklenemedi.");
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', loadStudents);
+  // Student Enrollment butonu
+  document.getElementById('studentEnrollmentBtn').addEventListener('click', function (e) {
+    e.preventDefault();
+    window.location.href = 'admin_student_enrollment.html';
+  });
+
+  // Attendance Tracking butonu
+  document.getElementById('attendanceTrackingBtn').addEventListener('click', function (e) {
+    e.preventDefault();
+    window.location.href = 'admin_attendance_tracking.html';
+  });
+    // Dashboard butonu
+  document.getElementById('adminDashboard').addEventListener('click', function (e) {
+    e.preventDefault();
+    window.location.href = 'admin_panel.html';
+  });
+  // Grades yönlendirme 
+  document.getElementById('adminGradesBtn').addEventListener('click', function (e) {
+    e.preventDefault();
+    window.location.href = 'admin_grade_management.html';
+  });
+
+  // Logout işlemi
+  const logoutBtn = document.querySelector('.logout a');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      localStorage.removeItem('token');
+      localStorage.removeItem('role');
+      window.location.href = 'login.html';
+    });
+  }
+  
+</script>
+
+
+</body>
+</html>

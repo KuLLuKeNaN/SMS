@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grade Management - SMS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* Reset styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f4f7f6;
+      display: flex;
+      min-height: 100vh;
+    }
+	.container { max-width: 1000px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; }
+    .student-card { margin-bottom: 30px; padding: 15px; border: 1px solid #ccc; border-radius: 6px; background: #fafafa; }
+    .student-card h3 { margin-bottom: 10px; }
+    .grade-form input { margin-right: 10px; padding: 8px; }
+    .grade-form button { padding: 8px 12px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    .grade-form button:hover { background: #2980b9; }
+    table { width: 100%; margin-top: 10px; border-collapse: collapse; font-size: 0.9rem; }
+    th, td { border: 1px solid #ddd; padding: 8px; }
+    th { background: #f9f9f9; }
+    .action-btn { margin-right: 5px; padding: 5px 8px; font-size: 0.8rem; border: none; border-radius: 3px; cursor: pointer; }
+    .edit-btn { background: #f39c12; color: white; }
+    .delete-btn { background: #e74c3c; color: white; }
+    
+    /* Sidebar styling */
+    .sidebar {
+      width: 250px;
+      background: #34495e;
+      color: #fff;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .sidebar h2 {
+      text-align: center;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #fff;
+      padding-bottom: 10px;
+    }
+    
+    .nav-list {
+      list-style: none;
+      flex: 1;
+    }
+    
+    .nav-list li {
+      margin-bottom: 15px;
+    }
+    
+    .nav-list li a {
+      text-decoration: none;
+      color: #fff;
+      font-size: 1rem;
+      display: block;
+      padding: 10px 15px;
+      border-radius: 5px;
+      transition: background 0.3s ease;
+    }
+    
+    .nav-list li a:hover,
+    .nav-list li a.active {
+      background: #2c3e50;
+    }
+    
+    .logout {
+      text-align: center;
+      margin-top: 20px;
+    }
+    
+    .logout a {
+      text-decoration: none;
+      color: #fff;
+      background: #e74c3c;
+      padding: 10px 20px;
+      border-radius: 5px;
+      transition: background 0.3s ease;
+    }
+    
+    .logout a:hover {
+      background: #c0392b;
+    }
+    
+    /* Main content styling */
+    .main-content {
+      flex: 1;
+      background: #ecf0f1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    
+    .header {
+      background: #fff;
+      padding: 15px 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .header h1 {
+      font-size: 1.5rem;
+      color: #333;
+    }
+    
+    /* Grade Management Form styling */
+    .grade-management {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+    
+    .grade-management h2 {
+      margin-bottom: 15px;
+      font-size: 1.3rem;
+      color: #333;
+      border-bottom: 1px solid #ecf0f1;
+      padding-bottom: 10px;
+    }
+    
+    .grade-management form {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .grade-management label {
+      font-size: 0.9rem;
+      color: #555;
+      margin-right: 10px;
+    }
+    
+    .grade-management input[type="text"],
+    .grade-management select {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    
+    .grade-management button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      background: #4e54c8;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .grade-management button:hover {
+      background: #3d44a5;
+    }
+    
+    /* Grade Table styling */
+    .grade-table {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .grade-table h2 {
+      margin-bottom: 15px;
+      font-size: 1.3rem;
+      color: #333;
+      border-bottom: 1px solid #ecf0f1;
+      padding-bottom: 10px;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ecf0f1;
+    }
+    
+    th {
+      background: #f8f8f8;
+      color: #333;
+    }
+    
+    tr:hover {
+      background: #f1f1f1;
+    }
+    
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 200px;
+        padding: 15px;
+      }
+      
+      .header h1 {
+        font-size: 1.3rem;
+      }
+      
+      .grade-management form {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Teacher Panel</h2>
+    <ul class="nav-list">
+      <li><a href="#" id="teacherDashboard">Dashboard</a></li>
+	  <li><a href="#" id="attendanceTrackingBtn">Attendance Tracking</a></li>
+      <li><a href="#" id="teacherGradesBtn">Grades</a></li>
+      <li><a href="#">Class Schedule</a></li>
+      <li><a href="#">Assignments</a></li>
+      <li><a href="#">Messages</a></li>
+    </ul>
+    <div class="logout">
+      <a href="#">Logout</a>
+    </div>
+  </div>
+  
+   <div class="container">
+    <h2>Grade Management</h2>
+    <div id="studentsContainer"></div>
+  </div>
+  <script>
+  const token = localStorage.getItem('token');
+    if (!token) {
+      alert("Lütfen giriş yapın.");
+      window.location.href = 'login.html';
+    }
+
+    const studentsContainer = document.getElementById('studentsContainer');
+
+    async function loadStudents() {
+      try {
+        const res = await fetch('http://localhost:3000/api/students', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await res.json();
+
+        data.students.forEach(student => {
+          const div = document.createElement('div');
+          div.className = 'student-card';
+          div.innerHTML = `
+  <h3>${student.name} (ID: ${student.id})</h3>
+  <form class="grade-form" data-student-id="${student.id}">
+    <input type="text" placeholder="Subject" required class="subject-input"/>
+    <input type="number" placeholder="Grade (0–100)" required class="grade-input"/>
+    <button type="submit">Add Grade</button>
+  </form>
+  <table class="grade-table">
+    <thead>
+      <tr><th>Subject</th><th>Grade</th><th>Date</th><th>Actions</th></tr>
+    </thead>
+    <tbody class="grade-tbody" id="grades-student-${student.id}"></tbody>
+  </table>
+`;
+
+          studentsContainer.appendChild(div);
+
+          loadGrades(student.id, div.querySelector('.grade-tbody'));
+
+          const form = div.querySelector('.grade-form');
+          form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const subject = form.querySelector('.subject-input').value;
+            const grade = form.querySelector('.grade-input').value;
+
+            try {
+              const res = await fetch('http://localhost:3000/api/grades', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify({ studentId: student.id, subject, grade })
+              });
+
+              if (res.ok) {
+  form.reset();
+  const tbodyElement = document.getElementById(`grades-student-${student.id}`);
+  loadGrades(student.id, tbodyElement); 
+}
+ 
+			  else {
+                alert("Not eklenemedi.");
+              }
+            } catch (err) {
+              console.error(err);
+            }
+          });
+        });
+      } catch (err) {
+        console.error("Student list error:", err);
+      }
+    }
+
+    async function loadGrades(studentId, tbody) {
+      try {
+        const res = await fetch(`http://localhost:3000/api/grades?studentId=${studentId}`, {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await res.json();
+        tbody.innerHTML = '';
+        data.grades.forEach(grade => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${grade.subject}</td>
+            <td>${grade.grade}</td>
+            <td>${new Date(grade.recordedAt).toLocaleDateString()}</td>
+            <td>
+              <button class="action-btn delete-btn" data-id="${grade.id}">Sil</button>
+            </td>
+          `;
+          tbody.appendChild(row);
+
+          row.querySelector('.delete-btn').addEventListener('click', async () => {
+            if (confirm("Bu not silinsin mi?")) {
+              await fetch(`http://localhost:3000/api/grades/${grade.id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': 'Bearer ' + token }
+              });
+              loadGrades(studentId, tbody);
+            }
+          });
+        });
+      } catch (err) {
+        console.error("Grade list error:", err);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', loadStudents);
+
+   
+    document.getElementById('teacherDashboard').addEventListener('click', e => {
+      e.preventDefault();
+      window.location.href = 'teacher_panel.html';
+    });
+
+    document.getElementById('attendanceTrackingBtn').addEventListener('click', e => {
+      e.preventDefault();
+      window.location.href = 'teacher_attendance_tracking.html';
+    });
+	
+	document.getElementById('teacherGradesBtn').addEventListener('click', function (e) {
+    e.preventDefault();
+    window.location.href = 'teacher_grade_management.html';
+  });
+
+    document.querySelector('.logout a').addEventListener('click', e => {
+      e.preventDefault();
+      localStorage.removeItem('token');
+      localStorage.removeItem('role');
+      window.location.href = 'login.html';
+    });
+</script>
+</body>
+</html>
