@@ -294,7 +294,7 @@
       };
 
       try {
-        let url = 'http://localhost:3000/api/students';
+        let url = 'https://sms-b004.onrender.com/api/students';
         let method = 'POST';
 
         if (editingId !== null) {
@@ -329,7 +329,7 @@
 
     async function loadStudents() {
       try {
-        const res = await fetch('http://localhost:3000/api/students', {
+        const res = await fetch('https://sms-b004.onrender.com/api/students', {
           headers: { 'Authorization': 'Bearer ' + token }
         });
         const data = await res.json();
@@ -371,7 +371,7 @@
             const id = this.getAttribute('data-id');
             if (confirm("Bu öğrenciyi silmek istiyor musun?")) {
               try {
-                const res = await fetch(`http://localhost:3000/api/students/${id}`, {
+                const res = await fetch(`https://sms-b004.onrender.com/api/students/${id}`, {
                   method: 'DELETE',
                   headers: { 'Authorization': 'Bearer ' + token }
                 });

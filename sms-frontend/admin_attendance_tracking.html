@@ -288,7 +288,7 @@
       if (!date) return alert("Tarih seçmelisiniz.");
 
       try {
-        const res = await fetch('http://localhost:3000/api/students', {
+        const res = await fetch('https://sms-b004.onrender.com/api/students', {
           headers: {
             'Authorization': 'Bearer ' + token
           }
@@ -326,7 +326,7 @@
         const status = row.querySelector('select').value;
 
         try {
-          await fetch('http://localhost:3000/api/attendance', {
+          await fetch('https://sms-b004.onrender.com/api/attendance', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

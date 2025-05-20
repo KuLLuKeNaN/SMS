@@ -222,13 +222,13 @@
 
     async function loadAttendance() {
   try {
-    const profileRes = await fetch('http://localhost:3000/api/profile', {
+    const profileRes = await fetch('https://sms-b004.onrender.com/api/profile', {
       headers: { Authorization: 'Bearer ' + token }
     });
     const profile = await profileRes.json();
     const userId = profile.user.id;
 
-    const studentRes = await fetch('http://localhost:3000/api/students', {
+    const studentRes = await fetch('https://sms-b004.onrender.com/api/students', {
       headers: { Authorization: 'Bearer ' + token }
     });
     const students = await studentRes.json();
@@ -240,7 +240,7 @@
     });
 
     // Tüm yoklamaları çek
-    const attRes = await fetch('http://localhost:3000/api/attendance', {
+    const attRes = await fetch('https://sms-b004.onrender.com/api/attendance', {
       headers: { Authorization: 'Bearer ' + token }
     });
     const attData = await attRes.json();

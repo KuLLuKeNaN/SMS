@@ -251,7 +251,7 @@
 
     async function loadStudents() {
       try {
-        const res = await fetch('http://localhost:3000/api/students', {
+        const res = await fetch('https://sms-b004.onrender.com/api/students', {
           headers: { 'Authorization': 'Bearer ' + token }
         });
         const data = await res.json();
@@ -285,7 +285,7 @@
             const grade = form.querySelector('.grade-input').value;
 
             try {
-              const res = await fetch('http://localhost:3000/api/grades', {
+              const res = await fetch('https://sms-b004.onrender.com/api/grades', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -315,7 +315,7 @@
 
     async function loadGrades(studentId, tbody) {
       try {
-        const res = await fetch(`http://localhost:3000/api/grades?studentId=${studentId}`, {
+        const res = await fetch(`https://sms-b004.onrender.com/api/grades?studentId=${studentId}`, {
           headers: { 'Authorization': 'Bearer ' + token }
         });
         const data = await res.json();
@@ -334,7 +334,7 @@
 
           row.querySelector('.delete-btn').addEventListener('click', async () => {
             if (confirm("Bu not silinsin mi?")) {
-              await fetch(`http://localhost:3000/api/grades/${grade.id}`, {
+              await fetch(`https://sms-b004.onrender.com/api/grades/${grade.id}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': 'Bearer ' + token }
               });

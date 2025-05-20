@@ -193,13 +193,13 @@
     async function loadGrades() {
       try {
         // 1. Kullanıcının kimliğini al
-        const profileRes = await fetch('http://localhost:3000/api/profile', {
+        const profileRes = await fetch('https://sms-b004.onrender.com/api/profile', {
           headers: { Authorization: 'Bearer ' + token }
         });
         const user = await profileRes.json();
 
         // 2. Ona ait öğrenci ID'sini bul
-        const studentRes = await fetch('http://localhost:3000/api/students', {
+        const studentRes = await fetch('https://sms-b004.onrender.com/api/students', {
           headers: { Authorization: 'Bearer ' + token }
         });
         const students = await studentRes.json();
@@ -211,7 +211,7 @@
         }
 
         // 3. Notları getir
-        const gradeRes = await fetch(`http://localhost:3000/api/grades?studentId=${matched.id}`, {
+        const gradeRes = await fetch(`https://sms-b004.onrender.com/api/grades?studentId=${matched.id}`, {
           headers: { Authorization: 'Bearer ' + token }
         });
         const gradeData = await gradeRes.json();
