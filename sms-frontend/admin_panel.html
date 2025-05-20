@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Dashboard - SMS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f4f7f6;
+      display: flex;
+      min-height: 100vh;
+    }
+    
+    /* Sidebar styling */
+    .sidebar {
+      width: 250px;
+      background: #34495e;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+    
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+      border-bottom: 1px solid #fff;
+      padding-bottom: 10px;
+    }
+    
+    .nav-list {
+      list-style: none;
+      flex: 1;
+    }
+    
+    .nav-list li {
+      margin-bottom: 15px;
+    }
+    
+    .nav-list li a {
+      text-decoration: none;
+      color: #fff;
+      font-size: 1rem;
+      display: block;
+      padding: 10px 15px;
+      border-radius: 5px;
+      transition: background 0.3s ease;
+    }
+    
+    .nav-list li a:hover,
+    .nav-list li a.active {
+      background: #2c3e50;
+    }
+    
+    .logout {
+      text-align: center;
+      margin-top: 20px;
+    }
+    
+    .logout a {
+      text-decoration: none;
+      color: #fff;
+      background: #e74c3c;
+      padding: 10px 20px;
+      border-radius: 5px;
+      transition: background 0.3s ease;
+    }
+    
+    .logout a:hover {
+      background: #c0392b;
+    }
+    
+    /* Main content styling */
+    .main-content {
+      flex: 1;
+      background: #ecf0f1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    
+    .header {
+      background: #fff;
+      padding: 15px 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .header h1 {
+      font-size: 1.5rem;
+      color: #333;
+    }
+    
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      padding: 20px;
+      transition: transform 0.3s ease;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .card h3 {
+      margin-bottom: 15px;
+      font-size: 1.2rem;
+      color: #333;
+      border-bottom: 1px solid #ecf0f1;
+      padding-bottom: 10px;
+    }
+    
+    .card p {
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 200px;
+        padding: 15px;
+      }
+      .header h1 {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Admin Panel</h2>
+    <ul class="nav-list">
+      <li><a href="#" id="adminDashboard">Dashboard</a></li>
+      <li><a href="#" id="studentEnrollmentBtn">Student Enrollment</a></li>
+	  <li><a href="#" id="attendanceTrackingBtn">Attendance Tracking</a></li>
+      <li><a href="#" id="adminGradesBtn">Grades</a></li>
+      
+    </ul>
+    <div class="logout">
+      <a href="#">Logout</a>
+    </div>
+  </div>
+  <div class="main-content">
+    <div class="header">
+      <h1>Dashboard Overview</h1>
+      <!-- Optionally add icons or user avatar here -->
+    </div>
+    <div class="content-grid">
+     <div class="card" style="width: 100%; padding: 20px;">
+  <h3>Student count by grade</h3>
+  <canvas id="classChart" width="400" height="200"></canvas>
+</div>
+
+<div class="card">
+  <h3>New Enrollments</h3>
+  <p id="newEnrollments">Loading...</p>
+</div>
+<div class="card">
+  <h3>Attendance Rate</h3>
+  <p id="attendanceRate">Loading...</p>
+</div>
+
+
+      
+      
+    </div>
+  </div>
+<script>
+  
+const token = localStorage.getItem('token');
+    if (!token) {
+      alert("Please log in.");
+      window.location.href = 'login.html';
+    }
+
+   
+    document.getElementById('adminDashboard').addEventListener('click', e => {
+      e.preventDefault();
+      window.location.href = 'admin_panel.html';
+    });
+
+    document.getElementById('studentEnrollmentBtn').addEventListener('click', e => {
+      e.preventDefault();
+      window.location.href = 'admin_student_enrollment.html';
+    });
+
+    document.getElementById('attendanceTrackingBtn').addEventListener('click', e => {
+      e.preventDefault();
+      window.location.href = 'admin_attendance_tracking.html';
+    });
+	
+	document.getElementById('adminGradesBtn').addEventListener('click', function (e) {
+    e.preventDefault();
+    window.location.href = 'admin_grade_management.html';
+  });
+    document.querySelector('.logout a').addEventListener('click', e => {
+      e.preventDefault();
+      localStorage.removeItem('token');
+      localStorage.removeItem('role');
+      window.location.href = 'login.html';
+    });
+
+    // Dashboard Verileri
+    window.addEventListener('DOMContentLoaded', async () => {
+      try {
+        // 1) Öğrenciler
+        const studentRes = await fetch('http://localhost:3000/api/students', {
+          headers: { Authorization: 'Bearer ' + token }
+        });
+
+        if (studentRes.ok) {
+          const data = await studentRes.json();
+          const students = data.students;
+
+          // New Enrollments
+          const now = new Date();
+          const thisMonth = now.getMonth();
+          const thisYear = now.getFullYear();
+          const newStudents = students.filter(s => {
+            const created = new Date(s.createdAt);
+            return created.getMonth() === thisMonth && created.getFullYear() === thisYear;
+          });
+          document.getElementById('newEnrollments').textContent = `${newStudents.length} new students this month`;
+
+          // Sınıf Bazlı Grafik
+          const classCounts = {};
+          students.forEach(s => {
+            const grade = s.gradeLevel || 'Unknown';
+            classCounts[grade] = (classCounts[grade] || 0) + 1;
+          });
+
+          const labels = Object.keys(classCounts);
+          const values = Object.values(classCounts);
+
+          const ctx = document.getElementById('classChart').getContext('2d');
+          new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Öğrenci Sayısı',
+                data: values,
+                backgroundColor: 'rgba(52, 152, 219, 0.6)',
+                borderColor: 'rgba(41, 128, 185, 1)',
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive: true,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: { stepSize: 1 }
+                }
+              }
+            }
+          });
+        } else {
+          document.getElementById('newEnrollments').textContent = "Error loading";
+        }
+
+        // 2) Attendance Rate
+        const attRes = await fetch('http://localhost:3000/api/attendance', {
+          headers: { Authorization: 'Bearer ' + token }
+        });
+
+        if (attRes.ok) {
+          const attData = await attRes.json();
+          const total = attData.attendance.length;
+          const present = attData.attendance.filter(a => a.status === 'PRESENT').length;
+          const rate = total > 0 ? Math.round((present / total) * 100) : 0;
+          document.getElementById('attendanceRate').textContent = `${rate}% average attendance`;
+        } else {
+          document.getElementById('attendanceRate').textContent = "Error";
+        }
+
+      } catch (err) {
+        console.error("Dashboard error:", err);
+        document.getElementById('newEnrollments').textContent = "Error";
+        document.getElementById('attendanceRate').textContent = "Error";
+      }
+    });
+</script>
+
+
+</body>
+</html>
